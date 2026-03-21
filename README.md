@@ -16,7 +16,7 @@ Docker image running an [OpenClaw](https://docs.openclaw.ai) gateway with web se
 * `ansible`
 * `colima`
 * `docker`
-- An Anthropic API key
+- An OpenAI API key
 - A [Brave Search API](https://brave.com/search/api/) key (for web search)
 
 ## Building
@@ -41,11 +41,12 @@ docker run -d \
   --name rosa \
   --restart unless-stopped \
   --pull always \
-  -e ANTHROPIC_API_KEY="your-api-key" \
+  -e OPENAI_API_KEY="your-api-key" \
   -e BRAVE_API_KEY="your-brave-api-key" \
+  -e FIRECRAWL_API_KEY="your-firecrawl-api-key" \
   -e TELEGRAM_BOT_TOKEN="your-telegram-bot-token" \
-  -e ROSA_AUTHOR_NAME="SVO" \
-  -e ROSA_AUTHOR_PICTURE="/assets/blog/authors/svo.png" \
+  -e TELEGRAM_ALLOW_FROM="your-telegram-user-id" \
+  -e ROSA_AUTHOR_NAME="Tamara" \
   -e ROSA_BLOG_URL="https://www.tamo.qual.is/" \
   -e ROSA_TOPICS="AI adoption in enterprise, AI-powered SaaS products, machine learning for business operations, conversational AI and customer experience, AI development tools and platforms" \
   -e ROSA_ANALYTICAL_LENS="market analysis, technology adoption lifecycle, jobs-to-be-done framework, lean startup methodology, product-market fit evaluation" \
@@ -53,7 +54,6 @@ docker run -d \
   -e ROSA_CRON_SCHEDULE="0 8 * * 1" \
   -e ROSA_TIMEZONE="Australia/Melbourne" \
   -e ROSA_WORD_COUNT="1500-3000" \
-  -e ROSA_POST_TOPIC="ai" \
   -e ROSA_LOCALE="en-AU" \
   -v /opt/rosa/data:/root/.openclaw \
   -p 127.0.0.1:3000:3000 \
@@ -66,13 +66,12 @@ On first run, the entrypoint automatically configures OpenClaw via non-interacti
 
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yes | Anthropic API key for the OpenClaw gateway |
+| `OPENAI_API_KEY` | Yes | OpenAI API key for the OpenClaw gateway |
 | `BRAVE_API_KEY` | No | [Brave Search API](https://brave.com/search/api/) key for web search |
 | `FIRECRAWL_API_KEY` | No | [Firecrawl](https://firecrawl.dev) API key for enhanced web scraping |
 | `TELEGRAM_BOT_TOKEN` | No | Telegram bot token from @BotFather |
 | `TELEGRAM_ALLOW_FROM` | With `TELEGRAM_BOT_TOKEN` | Comma-separated Telegram user IDs to allow |
-| `ROSA_AUTHOR_NAME` | Yes | Author name in post frontmatter |
-| `ROSA_AUTHOR_PICTURE` | Yes | Author picture path in frontmatter |
+| `ROSA_AUTHOR_NAME` | Yes | Author name for workspace configuration |
 | `ROSA_BLOG_URL` | Yes | Blog URL for style reference |
 | `ROSA_TOPICS` | Yes | Comma-separated research focus areas |
 | `ROSA_ANALYTICAL_LENS` | Yes | Analytical frameworks and perspectives to apply |
@@ -80,7 +79,6 @@ On first run, the entrypoint automatically configures OpenClaw via non-interacti
 | `ROSA_CRON_SCHEDULE` | Yes | Cron expression for research runs |
 | `ROSA_TIMEZONE` | Yes | Timezone for scheduling |
 | `ROSA_WORD_COUNT` | Yes | Target word count range |
-| `ROSA_POST_TOPIC` | Yes | Frontmatter `topic` field value |
 | `ROSA_LOCALE` | Yes | Spelling and language conventions |
 
 ## Telegram Integration
@@ -98,7 +96,7 @@ Connect Rosa to Telegram so you can chat with your assistant directly from the T
 docker run -d \
   --name rosa \
   --restart unless-stopped \
-  -e ANTHROPIC_API_KEY="your-api-key" \
+  -e OPENAI_API_KEY="your-api-key" \
   -e TELEGRAM_BOT_TOKEN="your-telegram-bot-token" \
   -e TELEGRAM_ALLOW_FROM="your-telegram-user-id" \
   -v /opt/rosa/data:/root/.openclaw \
@@ -109,24 +107,6 @@ docker run -d \
 On startup, the entrypoint automatically configures the Telegram channel in OpenClaw with group chats set to require `@mention`. When `TELEGRAM_ALLOW_FROM` is set, the DM policy is `allowlist` — only the listed Telegram user IDs can message the bot. Without it, the policy falls back to `pairing` (unknown users get a pairing code for the owner to approve).
 
 To find your Telegram user ID, message the bot without `TELEGRAM_ALLOW_FROM` set — the pairing prompt will show it.
-
-## Switching from API Key to Claude Subscription
-
-If you have a Claude Pro or Max subscription, you can use it instead of an API key.
-
-1. On a machine with Claude Code installed, generate a setup token:
-   ```bash
-   claude setup-token
-   ```
-2. Copy the token and paste it into the running container:
-   ```bash
-   docker exec -it rosa openclaw models auth paste-token --provider anthropic
-   ```
-
-3. Set the subscription as the default auth method:
-   ```bash
-   docker exec -it rosa openclaw models auth order set --provider anthropic anthropic:manual anthropic:default
-   ```
 
 ## Workspace Instructions
 

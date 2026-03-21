@@ -4,8 +4,8 @@ set -euo pipefail
 if [ ! -f "$HOME/.openclaw/openclaw.json" ]; then
   openclaw onboard --non-interactive --accept-risk \
     --mode local \
-    --auth-choice apiKey \
-    --anthropic-api-key "$ANTHROPIC_API_KEY" \
+    --auth-choice openai-api-key \
+    --openai-api-key "$OPENAI_API_KEY" \
     --gateway-port 3000 \
     --gateway-bind lan \
     --skip-skills \
@@ -38,6 +38,7 @@ node -e "
   config.agents = config.agents || {};
   config.agents.defaults = config.agents.defaults || {};
   config.agents.defaults.skipBootstrap = true;
+  config.agents.defaults.model = { primary: 'openai/gpt-5.4' };
   config.cron = { enabled: true };
   delete config.agent;
   fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n');
@@ -45,7 +46,6 @@ node -e "
 
 required_vars=(
   ROSA_AUTHOR_NAME
-  ROSA_AUTHOR_PICTURE
   ROSA_BLOG_URL
   ROSA_TOPICS
   ROSA_ANALYTICAL_LENS
@@ -53,7 +53,6 @@ required_vars=(
   ROSA_CRON_SCHEDULE
   ROSA_TIMEZONE
   ROSA_WORD_COUNT
-  ROSA_POST_TOPIC
   ROSA_LOCALE
 )
 
@@ -162,16 +161,16 @@ Use this frontmatter structure:
 \`\`\`
 ---
 title: "Your Post Title Here"
-excerpt: "A one-to-two sentence summary of the post's argument."
-topic: "${ROSA_POST_TOPIC}"
 date: "YYYY-MM-DD"
-author:
-  name: ${ROSA_AUTHOR_NAME}
-  picture: "${ROSA_AUTHOR_PICTURE}"
+excerpt: "A one-to-two sentence summary of the post's argument."
+tags: ["Tag One", "Tag Two", "Tag Three"]
 ---
 
 Post content in markdown...
 \`\`\`
+
+Choose 2-4 tags that capture the post's key themes. Tags should be capitalised naturally
+(e.g. "Service design", "AI adoption", "Market analysis").
 
 Name the file with a slug derived from the title (e.g. \`the-signal-and-the-silence.md\`).
 
