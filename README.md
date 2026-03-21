@@ -71,8 +71,6 @@ On first run, the entrypoint automatically configures OpenClaw via non-interacti
 | `FIRECRAWL_API_KEY` | No | [Firecrawl](https://firecrawl.dev) API key for enhanced web scraping |
 | `TELEGRAM_BOT_TOKEN` | No | Telegram bot token from @BotFather |
 | `TELEGRAM_ALLOW_FROM` | With `TELEGRAM_BOT_TOKEN` | Comma-separated Telegram user IDs to allow |
-| `SLACK_BOT_TOKEN` | No | Slack bot token (`xoxb-...`) from the Slack app settings |
-| `SLACK_APP_TOKEN` | With `SLACK_BOT_TOKEN` | Slack app-level token (`xapp-...`) with `connections:write` scope |
 | `ROSA_AUTHOR_NAME` | Yes | Author name in post frontmatter |
 | `ROSA_AUTHOR_PICTURE` | Yes | Author picture path in frontmatter |
 | `ROSA_BLOG_URL` | Yes | Blog URL for style reference |
@@ -111,29 +109,6 @@ docker run -d \
 On startup, the entrypoint automatically configures the Telegram channel in OpenClaw with group chats set to require `@mention`. When `TELEGRAM_ALLOW_FROM` is set, the DM policy is `allowlist` — only the listed Telegram user IDs can message the bot. Without it, the policy falls back to `pairing` (unknown users get a pairing code for the owner to approve).
 
 To find your Telegram user ID, message the bot without `TELEGRAM_ALLOW_FROM` set — the pairing prompt will show it.
-
-## Slack Integration
-
-Connect Rosa to Slack so you can chat with your assistant from any Slack workspace.
-
-### Setup
-
-1. Create a Slack app at https://api.slack.com/apps using the manifest in [`infrastructure/slack-app-manifest.json`](infrastructure/slack-app-manifest.json) — this configures Socket Mode, bot scopes, and event subscriptions automatically
-2. Go to Basic Information > App-Level Tokens > generate a token with `connections:write` scope — this is your `SLACK_APP_TOKEN` (`xapp-...`)
-3. Install the app to the workspace and go to OAuth & Permissions to copy the Bot User OAuth Token — this is your `SLACK_BOT_TOKEN` (`xoxb-...`)
-4. Pass both tokens as environment variables:
-
-```bash
-docker run -d \
-  --name rosa \
-  --restart unless-stopped \
-  -e ANTHROPIC_API_KEY="your-api-key" \
-  -e SLACK_BOT_TOKEN="xoxb-your-slack-bot-token" \
-  -e SLACK_APP_TOKEN="xapp-your-slack-app-token" \
-  -v /opt/rosa/data:/root/.openclaw \
-  -p 127.0.0.1:3000:3000 \
-  svanosselaer/rosa-service:latest
-```
 
 ## Switching from API Key to Claude Subscription
 
