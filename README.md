@@ -8,7 +8,7 @@
 [![Build Builder](https://github.com/svo/rosa/actions/workflows/builder.yml/badge.svg)](https://github.com/svo/rosa/actions/workflows/builder.yml)
 [![Build Service](https://github.com/svo/rosa/actions/workflows/service.yml/badge.svg)](https://github.com/svo/rosa/actions/workflows/service.yml)
 
-Docker image running an [OpenClaw](https://docs.openclaw.ai) gateway with web search and fetch capabilities for researching the latest AI adoption trends and how businesses are using AI to improve their services, and drafting blog posts about opportunities.
+Docker image running an [OpenClaw](https://docs.openclaw.ai) gateway with web search and fetch capabilities for researching the intersection of AI and service design, and drafting blog posts about how AI is transforming human-centred service delivery.
 
 ## Prerequisites
 
@@ -50,10 +50,10 @@ docker run -d \
   -e ROSA_BLOG_URL="https://www.tamo.qual.is/" \
   -e ROSA_TOPICS="AI adoption in enterprise, AI-powered SaaS products, machine learning for business operations, conversational AI and customer experience, AI development tools and platforms" \
   -e ROSA_ANALYTICAL_LENS="market analysis, technology adoption lifecycle, jobs-to-be-done framework, lean startup methodology, product-market fit evaluation" \
-  -e ROSA_TONE="insightful, practical but forward-looking, conversational authority — like a sharp industry analysis, not a whitepaper or a hype piece" \
+  -e ROSA_TONE="warm, empathetic, and encouraging — like a knowledgeable friend who genuinely cares, not a detached analyst or a hype piece" \
   -e ROSA_CRON_SCHEDULE="0 8 * * 1" \
   -e ROSA_TIMEZONE="Australia/Melbourne" \
-  -e ROSA_WORD_COUNT="1500-3000" \
+  -e ROSA_WORD_COUNT="500-900" \
   -e ROSA_LOCALE="en-AU" \
   -v /opt/rosa/data:/root/.openclaw \
   -p 127.0.0.1:3000:3000 \
