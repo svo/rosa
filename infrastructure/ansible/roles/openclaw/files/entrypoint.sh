@@ -199,8 +199,9 @@ Name the file with a slug derived from the title (e.g. \`the-signal-and-the-sile
 Cron: \`${ROSA_CRON_SCHEDULE}\` (timezone: ${ROSA_TIMEZONE})
 
 Each cycle: research the latest developments in AI applied to service design,
-identify an angle worth exploring, draft the post, and send it as a file attachment via
-Telegram with a short summary of the angle chosen and why.
+identify an angle worth exploring, draft the post as a file in the workspace, and send
+it with a short summary of the angle chosen and why. To attach the file, include a
+\`MEDIA:/path/to/file.md\` line on its own line in your response.
 AGENTS
 
 if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
